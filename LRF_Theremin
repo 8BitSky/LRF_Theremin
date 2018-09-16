@@ -1,0 +1,37 @@
+#include <LittleRobotFriends.h>
+
+// ------------------------------
+// Setup & Loop
+// ------------------------------
+
+int freq = 400;
+boolean soundOn = false;
+
+void myTapHandler(LRFEvent event){
+  soundOn = !soundOn;
+}
+
+void setup()
+{
+  // set up our library
+  lrf.setup();
+  lrf.disableEventExpressions();
+  lrf.setBoredomTimer(0);
+  lrf.setEventHandler(LRFEvent_Tap, &myTapHandler);
+}
+
+void loop()
+{
+  // run our library loop
+  lrf.loop();
+  if(soundOn){
+    if(lrf.motion.readX() > 5){
+      freq++;
+    } else if (lrf.motion.readX() < -5){
+      freq--;
+    }
+    lrf.speech.setFrequency(freq);
+    } else {
+    lrf.speech.quiet();
+  }
+}
